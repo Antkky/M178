@@ -24,9 +24,7 @@ class M178:
         self.spot = None
         self.options = None
 
-
-
-    def backtest(self, strategy): # run entire operation
+    def backtest(self, strategy):
         """
         Implement
         """
@@ -35,17 +33,51 @@ class M178:
         self.get_pricing_data()
         self.get_options_data()
 
-        if not self.runCheck():
-            return
-
-        BTdata = None
+        rows = []
 
         while not self.done: # main loop
             action = strategy(self.spot, self.options)
-            self.forward(action)
+            data = self.forward(action)
+            rows.append(data)
 
+        BTdata = pd.DataFrame(rows)
         return BTdata
 
+    def forward(self, action):
+        """
+        Advance the simulation by one step and update the environment state.
+        """
+        # Increment step
+        self.step += 1
+
+        # Check if the simulation is done
+        if self.step >= len(self.spot):
+            self.done = True
+            return None
+
+        # Execute the action
+        self.account.execute(action)
+
+        # Calculate market returns
+        if self.step > 0:
+            mkreturns = (self.spot[self.step].close - self.spot[self.step - 1].close) / self.spot[self.step - 1].close
+        else:
+            mkreturns = 0
+
+        # Calculate strategy returns (replace with appropriate calculation)
+        streturns = self.account.get_strategy_returns()
+
+        # Return current state data
+        return {
+            "step": self.step,
+            "open": self.spot[self.step].open,
+            "high": self.spot[self.step].high,
+            "low": self.spot[self.step].low,
+            "close": self.spot[self.step].close,
+            "volume": self.spot[self.step].volume,
+            "mkreturns": mkreturns,
+            "streturns": streturns,
+        }
 
     def montecarlo(self, data):
         MCdata = None
@@ -55,7 +87,6 @@ class M178:
         ############################
 
         return MCdata
-
 
     def plot(self, data):
         # Extract plot data
@@ -79,23 +110,6 @@ class M178:
         # Show the plot
         plt.show()
 
-
-    def forward(self, action): # go forward 1 step (1 row)
-        """
-        Implement
-        """
-        self.step += 1
-
-        if self.step >= 100:
-            self.done = True
-        # code goes here
-
-        self.account.execute(action)
-
-
-        return
-
-
     def reset(self):
         self.step = 0
         self.first_rendering = True
@@ -103,7 +117,6 @@ class M178:
 
         self.spot = None
         self.options = None
-
 
     def get_pricing_data(self):
         """
@@ -113,7 +126,6 @@ class M178:
         if self.spot.empty:
             raise ValueError(f"No spot data found for ticker {self.ticker}.")
         self.spot["Returns"] = self.spot['Adj Close'].pct_change()
-
 
     def get_options_data(self):
         """
