@@ -1,5 +1,6 @@
 class Account:
     ########################################################################################################
+
     class SpotPosition:
         def __init__(self, price, take, stop, size, direction):  # Entry
             self.entry_price = price
@@ -9,7 +10,7 @@ class Account:
             self.direction = direction
 
         def get_pnl(self, price):
-            """"
+            """
             """
             pnl_per_unit = 0
             if self.direction == "long":
@@ -19,7 +20,7 @@ class Account:
             return pnl_per_unit * self.position_size
 
         def check(self, price):
-            """"
+            """
             """
             if self.direction == "long":
                 if price <= self.stop_loss:
@@ -34,13 +35,14 @@ class Account:
             return None
 
         def close(self, price):
-            """"
+            """
             """
             pnl = self.get_pnl(price)
             self.position_size = 0
             return pnl
 
     ########################################################################################################
+
     class OptionPosition:
         def __init__(self, premium, strike, size, option_type, direction):  # entry
             self.premium = premium
@@ -50,7 +52,8 @@ class Account:
             self.direction = direction  # "long" or "short"
 
         def get_pnl(self, price):
-            """"
+            """
+            write something here
             """
             intrinsic_value = 0
             if self.option_type == "call":
@@ -76,7 +79,8 @@ class Account:
         self.historical_realized_pnl = []
 
     def get_unrealized_pnl(self, price):
-        """"
+        """
+        type this out
         """
         self.unrealized_pnl = 0
 
@@ -153,4 +157,7 @@ class Account:
         return self.equity
 
     def return_data(self):
+        """
+        Implement
+        """
         pass
