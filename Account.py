@@ -68,7 +68,7 @@ class Account:
 
     ########################################################################################################
 
-    def __init__(self, deposit):
+    def __init__(self, deposit: float = 10000):
         self.equity = deposit
         self.cash = deposit
         self.unrealized_pnl = 0
@@ -94,14 +94,13 @@ class Account:
 
         return self.unrealized_pnl
 
-    def execute(self, action, size, price, direction, take=None, stop=None, option=None):
+    def execute(self, entry:bool, size: int, price: float, direction: bool, take:float=None, stop:float=None, option=None):
         """
         Handles execution of spot and options trades.
         """
         # spot execution
-        if action == "buy_spot" or action == "sell_spot":
-            direction = "long" if action == "buy_spot" else "short"
-            cost = size * price
+        if entry is True:
+            cost = size * 0
 
             if self.cash >= cost: # balance check
                 self.cash -= cost
@@ -111,6 +110,7 @@ class Account:
                 raise ValueError("Insufficient cash to execute trade.")
 
         # options execution
+        """
         elif action == "buy_option" or action == "sell_option":
             if option is None:
                 raise ValueError("Option details required for options trade.")
@@ -126,6 +126,7 @@ class Account:
                 self.options.append(new_option)
             else:
                 raise ValueError("Insufficient cash to execute trade.")
+        """
 
     def close_position(self, position, price):
         """

@@ -1,12 +1,15 @@
-def strategy(spot, options):
+import pandas as pd
+
+def strategy(spot: pd.DataFrame):
     """
         Implement Strategy Here
     """
-    return { # return type example
+    trade = {
         "type": "buy",
-        "size": 10,
-        "price": 124.29,
+        "size": 1,
+        "price": spot.iloc[0]["open"],
         "direction": True,
-        "takeprofit": None,
-        "stoploss": None,
+        "takeprofit": 100,
+        "stoploss": 100,
     }
+    return trade
