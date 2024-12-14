@@ -73,7 +73,7 @@ class M178:
 
         self.update()
 
-    def montecarlo(self, data: pd.DataFrame, iterations: int=500):
+    def montecarlo(self, data: pd.DataFrame, iterations: int=250):
         """
         Generate a dataset of randomized equity curves using Monte Carlo simulation.
 
